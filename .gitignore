@@ -1,5 +1,21 @@
-node_modules
+# Ignore list for Python project
+venv/
+__pycache__/
+
 .env
+
+*.pyc
+*.pyo
+*.pyd
+
+*.log
+
+# Ignore list for hardhat project
+
+# Artifacts and compiled contracts
+artifacts/
+
+node_modules
 
 # Hardhat files
 /cache
