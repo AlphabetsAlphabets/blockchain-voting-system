@@ -1,8 +1,10 @@
+# General ignore list
+.env
+
 # Ignore list for Python project
 venv/
 __pycache__/
 
-.env
 
 *.pyc
 *.pyo
