@@ -3,6 +3,7 @@ from web3 import Web3
 from config import Config
 
 # Connect to Ethereum
+print(Config.RPC_URL)
 w3 = Web3(Web3.HTTPProvider(Config.RPC_URL))
 assert w3.is_connected(), "Failed to connect to Ethereum!"
 
