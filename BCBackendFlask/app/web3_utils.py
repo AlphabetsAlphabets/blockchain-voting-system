@@ -7,7 +7,7 @@ w3 = Web3(Web3.HTTPProvider(Config.RPC_URL))
 assert w3.is_connected(), "Failed to connect to Ethereum!"
 
 # Load contract ABI
-with open("artifacts/contracts/incrementor.sol/Incrementer.json") as f:
+with open("BCContract/artifacts/contracts/Increment.sol/Incrementer.json") as f:
     contract_abi = json.load(f)["abi"]
 
 # Contract instance
