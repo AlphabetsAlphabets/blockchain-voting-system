@@ -14,9 +14,11 @@ struct Voter {
 contract Election {
     address public owner;
     Proposal[] public proposals;
-    mapping(address => bool) voters;    
+    mapping(address => bool) voters; 
+    uint start_date;
+    uint end_date;   
 
-    constructor(string[] items, Voter[] allowed_voters) {
+    constructor(string[] items, Voter[] allowed_voters, string start, string end) {
         for (uint256 i = 0; i < items.length; i++) {
             proposals.push(Proposal {
                 name: items[i],
@@ -29,6 +31,8 @@ contract Election {
             voters[allowed_voters[i]] = false;
         }
 
+        // Will need to convert start and end into a unix time stamp
+        // then save it to start_date and end_date.
         owner = msg.sender;
     }
 }
