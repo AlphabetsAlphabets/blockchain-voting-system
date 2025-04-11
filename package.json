@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0"
+  }
+}
