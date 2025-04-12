@@ -2,8 +2,7 @@ pragma solidity ^0.8.19
 
 struct Proposal {
     bytes32 name;
-    uint agree_votes;
-    uint disagree_votes;
+    uint votes;
 }
 
 struct Voter {
@@ -13,18 +12,21 @@ struct Voter {
 
 contract Election {
     address public owner;
-    Proposal[] public proposals;
+    bool public ended;
+
+    // string is the name of the thing to vote for.
+    mapping(string => Proposal) proposals;
     mapping(address => bool) voters; 
+
     uint start_date;
     uint end_date;   
 
     constructor(string[] items, Voter[] allowed_voters, string start, string end) {
         for (uint256 i = 0; i < items.length; i++) {
-            proposals.push(Proposal {
+            proposals[items[i]] = Proposal {
                 name: items[i],
-                agree_votes: 0,
-                disagree_votes: 0,
-            });
+                votes: 0,
+            }
         }
 
         for (uint i = 0; i < allowed_voters.length; i++) {
