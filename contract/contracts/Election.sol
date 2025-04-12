@@ -52,4 +52,18 @@ contract Election {
         proposals[proposal].votes += 1;
         return 0;
     }
+
+    function end_vote(address person) public returns (uint status) {
+        if (person == owner) {
+            ended = true;
+        }
+    }
+
+    function end_vote_automatically() public returns (uint status) {
+        // TODO: Will need to call from the outside.
+
+
+        return end_vote(owner);
+    }
+
 }
