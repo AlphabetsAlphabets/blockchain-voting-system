@@ -37,4 +37,19 @@ contract Election {
         // then save it to start_date and end_date.
         owner = msg.sender;
     }
+
+    // 0 = ok, 1 = failure, 2 = election ended
+    function vote(address person, string proposal) public returns (uint status) {
+        if (ended) {
+            return 2;
+        }
+
+        Voter voter = voters[person];
+        if (voter.voted) {
+            return 1;
+        }
+
+        proposals[proposal].votes += 1;
+        return 0;
+    }
 }
