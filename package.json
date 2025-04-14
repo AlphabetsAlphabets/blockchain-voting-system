@@ -1,10 +1,29 @@
 {
   "dependencies": {
     "dotenv": "^16.5.0",
-    "ethers": "^6.13.5"
+    "ethers": "^6.13.6"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.2.3",
     "hardhat": "^2.23.0"
-  }
+  },
+  "name": "blockchain-voting-system",
+  "version": "1.0.0",
+  "description": "To be able to run this you need to",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlphabetsAlphabets/blockchain-voting-system.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/AlphabetsAlphabets/blockchain-voting-system/issues"
+  },
+  "homepage": "https://github.com/AlphabetsAlphabets/blockchain-voting-system#readme"
 }

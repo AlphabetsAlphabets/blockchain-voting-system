@@ -94,6 +94,7 @@ contract Election {
         return allProposals;
     }
 
+    // change to bools
     function checkElectionStatus() public view returns (string memory) {
         if (ended) return "Election ended";
         if (block.timestamp < startTime) return "Election not started";
