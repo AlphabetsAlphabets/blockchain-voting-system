@@ -1,5 +1,5 @@
 from app import create_app
-from web3_utils import ContractHelper
+from contract_helper import ContractHelper
 
 contract_helper = None
 
