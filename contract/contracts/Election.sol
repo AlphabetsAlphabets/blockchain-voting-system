@@ -1,6 +1,6 @@
 // https://spdx.org/licenses/ , not important but should be considered in documentation
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19
+pragma solidity ^0.8.19;
 
 struct Proposal {
     string name;

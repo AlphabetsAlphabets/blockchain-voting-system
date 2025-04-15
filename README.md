@@ -1,6 +1,9 @@
+For information on running the Dapp stay on this file. For information on how to deploy smart contracts refer to the `README.md` file in `contract/` directory.
+
 # Setup
 
-To be able to run this you need to
+To get the application up and running run the file `run.py` in the `site` directory with this command:
 
-1. Run npm run compile in the `contract` directory.
-2. Run `run.py` in the `site` directory.
+```
+python run.py
+```

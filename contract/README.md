@@ -1,13 +1,25 @@
-# Sample Hardhat Project
+# Setup
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a Hardhat Ignition module that deploys that contract.
+To develop smart contracts make sure to run
 
-Try running some of the following tasks:
-
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat ignition deploy ./ignition/modules/Lock.ts
 ```
+npm install
+```
+
+In order to download the required dependencies. Make sure this command is ran inside the `contract` folder.
+
+# Compiling and deploying smart contracts
+
+After making a smart contract make sure to run:
+
+```
+npx hardhat compile
+```
+
+Then deploy it with
+
+```
+npx hardhat run scripts/<name_of_script> --network scrollSepolia
+```
+
+<name_of_script> is the name of the deployment script.
