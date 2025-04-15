@@ -2,8 +2,7 @@
 
 **Ensure that all commands from this point onwards are ran from within the `contract` folder.**
 
-1. Install all
-   To develop smart contracts make sure to run
+1. Install all dependencies
 
 ```
 npm install
