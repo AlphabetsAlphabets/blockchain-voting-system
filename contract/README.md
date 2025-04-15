@@ -1,12 +1,24 @@
 # Setup
 
-To develop smart contracts make sure to run
+**Ensure that all commands from this point onwards are ran from within the `contract` folder.**
+
+1. Install all
+   To develop smart contracts make sure to run
 
 ```
 npm install
 ```
 
-In order to download the required dependencies. Make sure this command is ran inside the `contract` folder.
+2. Create a .env file with the following contents
+
+```
+RPC_URL=https://sepolia.infura.io/v3/0b68e7b7d2ca45a0a81e71919c78136c
+BACKUP=https://sepolia.infura.io/v3/0b68e7b7d2ca45a0a81e71919c78136c
+PRIVATE_KEY=
+CONTRACT_ADDRESS=
+```
+
+Make sure to fill in `PRIVATE_KEY` with the private key of your wallet.
 
 # Compiling and deploying smart contracts
 
