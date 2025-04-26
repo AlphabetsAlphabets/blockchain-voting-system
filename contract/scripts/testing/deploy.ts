@@ -1,7 +1,8 @@
 // this file is an example of how new elections can be created
 
 import { ethers, network } from "hardhat";
-import { time } from "@nomicfoundation/hardhat-network-helpers";
+// import { time } from "@nomicfoundation/hardhat-network-helpers";
+import * as fs from 'fs';
 
 // non-blocking async
 async function main() {
@@ -41,6 +42,20 @@ async function main() {
     console.log("Election ends at:", new Date(endTime * 1000).toLocaleString());
     console.log("Proposals:", proposals);
     console.log("Allowed voters:", allowedVoters);
+
+    // save info to a json file
+    const deploymentInfo = {
+        contractAddress: election.address,
+        deployedAt: new Date().toISOString(),
+        network: network.name
+    };
+      
+    fs.writeFileSync(
+        'deployment.json',
+        JSON.stringify(deploymentInfo, null, 2)
+    );
+      
+    console.log("Deployment info saved to deployment.json");
 }
 
 // We recommend this pattern to be able to use async/await everywhere

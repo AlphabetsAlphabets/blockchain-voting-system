@@ -2,6 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as incrementSol from "./Increment.sol";
-export * as deprecated from "./deprecated";
-export { Election__factory } from "./Election__factory";
 export { Lock__factory } from "./Lock__factory";
