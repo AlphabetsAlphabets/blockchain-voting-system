@@ -12,7 +12,7 @@ declare global {
 // make sure u run 'npx hardhat compile' to be able to access this
 // used to connect
 // artifacts folder is ignored by git
-import ElectionABI from '../../artifacts/contracts/Election.sol/Election.json';
+import ElectionABI from '../artifacts/contracts/Election.sol/Election.json';
 
 // adjust ur env based on this
 // should probably replace in the future
@@ -30,14 +30,20 @@ export type ElectionStatus =
   | 'Voting period over (ready to end)'
   | 'Voting in progress';
 
+// provider fallback
+const getDefaultProvider = () => {
+    return new ethers.JsonRpcProvider("https://sepolia-rpc.scroll.io");
+};
+
 // helper to get contract instance
 async function getContract() {
-    const provider = new ethers.BrowserProvider(window.ethereum);
-    return new ethers.Contract(
-        contractAddress,
-        ElectionABI.abi,
-        provider
-    );
+    if (typeof window !== "undefined" && window.ethereum) {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      return new ethers.Contract(contractAddress, ElectionABI.abi, provider);
+    }
+    // fallback for Node.js environment
+    const provider = getDefaultProvider();
+    return new ethers.Contract(contractAddress, ElectionABI.abi, provider);
 }
 
 /// Getters
