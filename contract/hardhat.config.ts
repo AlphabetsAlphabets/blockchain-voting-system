@@ -1,5 +1,6 @@
 import type { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-ignition-ethers";
+import '@nomiclabs/hardhat-ethers';
 
 import dotenv from "dotenv";
 
