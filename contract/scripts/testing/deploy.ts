@@ -1,47 +1,73 @@
-import { ethers } from "hardhat";
-import dotenv from "dotenv";
+// this file is an example of how new elections can be created
 
-dotenv.config();
+import { ethers, network } from "hardhat";
+// import { time } from "@nomicfoundation/hardhat-network-helpers";
+import * as fs from "fs";
 
 // non-blocking async
-// (all network-based calls should be like this)
 async function main() {
-  // config
-  const proposals = ["Proposal A", "Proposal B", "Proposal C"];
-  const votingPeriodDays = 7;
+  console.log("Deploying to network:", network.name);
 
-  const ownerAddress = "0xC5c79779b78FB531Be4C8f4Aa87487361434Caa0"; // my address
-  const voterAddress = "0xAc1891E2b8E8DD1C2bcd9A61811e1032FD3FF17e"; // jia hong's address
+  const [deployer] = await ethers.getSigners();
 
-  // calculate start and end
-  const startTime = Math.floor(Date.now() / 1000); // rn frfr
-  const endTime = startTime + votingPeriodDays * 24 * 60 * 60; // 1 week from now
+  console.log("Deploying contracts with the account:", deployer.address);
+  console.log(
+    "Account balance:",
+    (await ethers.provider.getBalance(deployer.address)).toString()
+  );
 
   // get contract factory
   const Election = await ethers.getContractFactory("Election");
 
-  // deploy the contract
-  console.log("Deploying Election contract...");
+  // setup deployment parameters
+  const now = Math.floor(Date.now() / 1000); // Current timestamp in seconds
+  const oneHour = 60 * 60;
+  const oneDay = 24 * oneHour;
+
+  const startTime = now + oneHour; // Start in 1 hour
+  const endTime = now + oneDay; // End in 1 day
+
+  // example proposals
+  const proposals = ["Proposal A", "Proposal B", "Proposal C"];
+
+  const allowedVoters = [
+    deployer.address,
+    "0xC5c79779b78FB531Be4C8f4Aa87487361434Caa0", // marcel's address
+    "0xAc1891E2b8E8DD1C2bcd9A61811e1032FD3FF17e", // jia hong's address
+    "0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199", // testnet wallet address #19
+  ];
+
+  // deploy contract
   const election = await Election.deploy(
     proposals,
-    [ownerAddress, voterAddress], // Both addresses can vote
+    allowedVoters,
     startTime,
     endTime
   );
 
-  await election.waitForDeployment();
-
-  console.log(`Election contract deployed to: ${await election.getAddress()}`);
-  console.log(`Owner: ${ownerAddress}`);
-  console.log(`Allowed voters: ${ownerAddress}, ${voterAddress}`);
+  console.log("Election deployed to:", await election.getAddress());
   console.log(
-    `Voting period: From ${new Date(startTime * 1000)} to ${new Date(
-      endTime * 1000
-    )}`
+    "Election starts at:",
+    new Date(startTime * 1000).toLocaleString()
   );
-  console.log(`Proposals: ${proposals.join(", ")}`);
+  console.log("Election ends at:", new Date(endTime * 1000).toLocaleString());
+  console.log("Proposals:", proposals);
+  console.log("Allowed voters:", allowedVoters);
+
+  // // save info to a json file
+  // const deploymentInfo = {
+  //   contractAddress: election.address,
+  //   deployedAt: new Date().toISOString(),
+  //   network: network.name,
+  // };
+
+  // fs.writeFileSync("deployment.json", JSON.stringify(deploymentInfo, null, 2));
+
+  // console.log("Deployment info saved to deployment.json");
 }
 
+// We recommend this pattern to be able to use async/await everywhere
+// and properly handle errors.
 main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
