@@ -35,7 +35,6 @@ async function main() {
 
     // deploy contract
     const election = await Election.deploy(proposals, allowedVoters, startTime, endTime);
-    await election.deployed();
 
     console.log("Election deployed to:", election.address);
     console.log("Election starts at:", new Date(startTime * 1000).toLocaleString());
