@@ -17,7 +17,11 @@ contract Election {
 
     uint public startTime;
     uint public endTime;
-    string[] public proposalNames; // to track names of proposals (redundant?)
+    // This isn't redundant because the mapping proposals at the top cannot be looped through.
+    // Most solutions online use a separate variable to keep track of the key. In this case
+    // the proposal names.
+    string[] public proposalNames;
+    uint totalProposals;
 
     // modifiers are used to change the behaviours of functions in a declarative way
     // allows us to add preconditions, postconditions, or other logic that must be executed before or after a function call
@@ -40,12 +44,15 @@ contract Election {
         startTime = _startTime;
         endTime = _endTime;
 
+        totalProposals = 0;
+
         for (uint256 i = 0; i < items.length; i++) {
             proposals[items[i]] = Proposal({
                 name: items[i],
                 votes: 0
             });
             proposalNames.push(items[i]);
+            totalProposals += 1;
         }
 
         for (uint i = 0; i < allowedVoters.length; i++) {
@@ -87,10 +94,12 @@ contract Election {
     }
 
     function getAllProposals() public view returns (Proposal[] memory) {
-        Proposal[] memory allProposals = new Proposal[](proposalNames.length);
-        for (uint i = 0; i < proposalNames.length; i++) {
-            allProposals[i] = proposals[proposalNames[i]];
+        Proposal[] memory allProposals = new Proposal[](totalProposals);
+        for (uint i = 0; i < totalProposals; i++) {
+            Proposal memory proposal = proposals[proposalNames[i]];
+            allProposals[i] = proposal;
         }
+
         return allProposals;
     }
 
