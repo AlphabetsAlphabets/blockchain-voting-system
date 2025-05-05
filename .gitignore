@@ -17,6 +17,7 @@ cache/
 
 # Artifacts and compiled contracts
 artifacts/
+typechian-types/
 
 node_modules
 
