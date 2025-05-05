@@ -1,76 +1,86 @@
-# Setup
+Respect the project structure.
+1. `ignition/modules` - Write deployment code inside this folder.
+2. `test` - Tests go here.
+3. `contracts` - Contracts go here.
 
-**Ensure that all commands from this point onwards are ran from within the `contract` folder.**
+# Deploying
+The purpose of deployment is to use it. It can be deployed to the test net or it can be deployed to the local blockchain the following is the difference:
+1. When deploying to the local blockchain, no testnet ETH is required.
+2. When deploying to the testnet, testnet ETH is required.
 
-1. Install all dependencies
-
-```
-npm install
-```
-
-2. Create a .env file with the following contents
-
-```
-RPC_URL=https://sepolia-rpc.scroll.io/
-PRIVATE_KEY=0xdf57089febbacf7ba0bc227dafbffa9fc08a93fdc68e1e42411a14efcf23656e
-CONTRACT_ADDRESS=
-```
-
-- `PRIVATE_KEY` is the value of private key #19 when you run `npx hardhat node` to start up a local blockchain.
-- `CONTRACT_ADDRESS` is the address of the contract you wanna test for.
-
-# Compiling and deploying smart contracts
-
-After making a smart contract make sure to run:
-
-```
-npx hardhat compile
-```
-
-Then deploy it with
-
-```
-npx hardhat run scripts/<name_of_script> --network scrollSepolia
-```
-
-<name_of_script> is the name of the deployment script.
-
-# Local testing
-
-1. Start the local blockchain with
+Choose local deployment during the initial phases. Choose testnet deployment when it is meant to be used by actual users. To start the local blockchain run this command:
 
 ```
 npx hardhat node
 ```
 
-2. Open a new terminal and run
+To deploy locally run:
 
 ```
-npx hardhat run ./scripts/testing/deploy.ts
+npx hardhat ignition deploy <path/to/script> --network localhost
 ```
 
-The output will be as follows:
+To deploy to a specific network like the scroll sepolia testnet replace `localhost` with `scrollSepolia`.
+
+This is some example output from local deployment.
+1. From the terminal where you ran `ignition deploy`.
 
 ```
-Deploying to network: hardhat
-Deploying contracts with the account: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
-Account balance: 10000000000000000000000
-Election deployed to: 0x5FbDB2315678afecb367f032d93F642f64180aa3
-Election starts at: 29/04/2025, 9:33:21 pm
-Election ends at: 30/04/2025, 8:33:21 pm
-Proposals: [ 'Proposal A', 'Proposal B', 'Proposal C' ]
-Allowed voters: [
-  '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
-  '0xC5c79779b78FB531Be4C8f4Aa87487361434Caa0',
-  '0xAc1891E2b8E8DD1C2bcd9A61811e1032FD3FF17e',
-  '0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199'
-]
+jiahongyap@star contract % npx hardhat ignition deploy ignition/modules/Election.ts --network localhost
+Hardhat Ignition 🚀
+
+Deploying [ ElectionModule ]
+
+Batch #1
+  Executed ElectionModule#Election
+
+[ ElectionModule ] successfully deployed 🚀
+
+Deployed Addresses
+
+ElectionModule#Election - 0x5FbDB2315678afecb367f032d93F642f64180aa3
 ```
 
-Make a note of `Election deployed to: 0x5FbDB2315678afecb367f032d93F642f64180aa3` and put the address into `CONTRACT_ADDRESS` for the .env file.
-
-3. Run the test script.
+2. From the terminal where you started the local blockchain with `npx hardhat node`.
 
 ```
-npx hardhat run scripts/testing/service_test.ts
+eth_chainId
+hardhat_metadata
+eth_accounts
+hardhat_getAutomine
+eth_chainId
+eth_getBlockByNumber
+eth_getTransactionCount (3)
+eth_getBlockByNumber
+eth_getTransactionCount
+eth_getBlockByNumber
+eth_chainId
+eth_maxPriorityFeePerGas
+eth_estimateGas
+eth_call
+  Contract deployment: Election
+  Contract address:    0x5fbdb2315678afecb367f032d93f642f64180aa3
+  From:                0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
+
+eth_sendTransaction
+  Contract deployment: Election
+  Contract address:    0x5fbdb2315678afecb367f032d93f642f64180aa3
+  Transaction:         0xb5433970101443cf926c6a03c07f24e15dedc7deb722d13e34a32c8e9556fc2b
+  From:                0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
+  Value:               0 ETH
+  Gas used:            1664197 of 1664197
+  Block #1:            0xc51053e20c342f677b84fc400b337d44905a3ae2560804ad66b910555812d4bb
+
+eth_getTransactionByHash
+eth_getBlockByNumber
+eth_getTransactionReceipt
 ```
+
+# Testing
+Testing is completely isolated. This means you do not need to have the local blockchain up when testing. To test simply run:
+
+```
+npx hardhat test
+```
+
+The library used for testing is called [Mocha](https://mochajs.org/). I managed to find [this](https://masteringjs.io/mocha) guide as well.
