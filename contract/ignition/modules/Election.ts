@@ -1,5 +1,7 @@
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
+
 import dotenv from "dotenv";
+dotenv.config();
 
 const ElectionModule = buildModule("ElectionModule", (m) => {
     m.getParameter("owner", process.env.WALLET_ADDRESS);
