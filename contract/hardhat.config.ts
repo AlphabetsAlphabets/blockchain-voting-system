@@ -1,9 +1,10 @@
 import type { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
+
+import "@nomicfoundation/hardhat-ignition-ethers"; // Installs "ignition" which helps with deployment.
+import "@nomicfoundation/hardhat-ethers"; // Install an custom version of "ethers.js" into hardhat runtime environment.
+
 import dotenv from "dotenv";
-
-require("@nomicfoundation/hardhat-ignition-ethers");
-
 dotenv.config();
 
 const config: HardhatUserConfig = {
