@@ -14,98 +14,26 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
-      name: "Incrementer",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Incrementer__factory>;
-    getContractFactory(
-      name: "Lock",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Lock__factory>;
-    getContractFactory(
       name: "Election",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Election__factory>;
-    getContractFactory(
-      name: "Incrementer",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Incrementer__factory>;
-    getContractFactory(
-      name: "Lock",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Lock__factory>;
 
-    getContractAt(
-      name: "Incrementer",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Incrementer>;
-    getContractAt(
-      name: "Lock",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Lock>;
     getContractAt(
       name: "Election",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.Election>;
-    getContractAt(
-      name: "Incrementer",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Incrementer>;
-    getContractAt(
-      name: "Lock",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Lock>;
 
-    deployContract(
-      name: "Incrementer",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Incrementer>;
-    deployContract(
-      name: "Lock",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Lock>;
     deployContract(
       name: "Election",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.Election>;
-    deployContract(
-      name: "Incrementer",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Incrementer>;
-    deployContract(
-      name: "Lock",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Lock>;
 
-    deployContract(
-      name: "Incrementer",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Incrementer>;
-    deployContract(
-      name: "Lock",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Lock>;
     deployContract(
       name: "Election",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.Election>;
-    deployContract(
-      name: "Incrementer",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Incrementer>;
-    deployContract(
-      name: "Lock",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Lock>;
 
     // default types
     getContractFactory(
