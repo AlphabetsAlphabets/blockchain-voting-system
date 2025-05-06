@@ -12,16 +12,20 @@ contract Election {
     bool public ended;
 
     mapping(string => Proposal) public proposals;
-    mapping(address => bool) public voterRegistry;  // for tracking who can vote
-    mapping(address => bool) public hasVoted;       // for tracking who has voted
-
-    uint public startTime;
-    uint public endTime;
     // This isn't redundant because the mapping proposals at the top cannot be looped through.
     // Most solutions online use a separate variable to keep track of the key. In this case
     // the proposal names.
     string[] public proposalNames;
     uint totalProposals;
+
+    mapping(address => bool) public voterRegistry;  // for tracking who can vote
+    address[] voterAddresses;
+    uint totalVoters;
+
+    mapping(address => bool) public hasVoted;       // for tracking who has voted
+
+    uint public startTime;
+    uint public endTime;
 
     // modifiers are used to change the behaviours of functions in a declarative way
     // allows us to add preconditions, postconditions, or other logic that must be executed before or after a function call
@@ -55,8 +59,10 @@ contract Election {
             totalProposals += 1;
         }
 
+        voterAddresses = allowedVoters;
         for (uint i = 0; i < allowedVoters.length; i++) {
             voterRegistry[allowedVoters[i]] = true;
+            totalVoters += 1;
         }
     }
 
@@ -101,6 +107,15 @@ contract Election {
         }
 
         return allProposals;
+    }
+
+    function getAllowedVoters() public view returns (address[] memory) {
+        address[] memory voters = new address[](totalVoters);
+        for (uint i = 0; i < totalVoters; i++) {
+            voters[i] = voterAddresses[i];
+        }
+
+        return voters;
     }
 
     // change to bools
