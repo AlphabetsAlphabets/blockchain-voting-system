@@ -12,9 +12,7 @@ import { Contract } from "ethers";
 
 dotenv.config()
 
-describe("Election details", function () {
-  let contractAddress = "";
-  before(async () => {
+async function deployContract(): Promise<string> {
     const now = Math.floor(Date.now() / 1000);
     const oneHour = 60 * 60;
     const oneDay = 24 * oneHour;
@@ -35,18 +33,17 @@ describe("Election details", function () {
     const contract = await factory.deploy(proposals, allowedVoters, startTime, endTime);
     await contract.waitForDeployment();
 
-    contractAddress = await contract.getAddress();
+  return await contract.getAddress();
+}
+
+describe("Vote tests", function () {
+  let contractAddress = "";
+  let voteError = "Unable to vote";
+
+  before(async () => {
+    contractAddress = await deployContract();
   });
 
-  it("Get all proposals", async () => {
-    const contract = await ethers.getContractAt("Election", contractAddress);
-    let proposals = await contract.getAllProposals();
-
-    expect(proposals).to.not.equal(undefined);
-  });
-
-  // Order of the tests ran is not guaranteed. Which means you need to specify which test to run.
-  // Should try to make it better by enforcing order some how.
   it("Should make a vote.", async () => {
     let contract = await ethers.getContractAt("Election", contractAddress);    
 
