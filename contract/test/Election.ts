@@ -48,8 +48,9 @@ describe("Vote tests", function () {
     let contract = await ethers.getContractAt("Election", contractAddress);    
 
     let result = await contract.canVote("Proposal A");
-    let transaction = await contract.vote("Proposal A");
-    expect(result).to.be.equal(0) && expect(transaction).to.not.throw;
+    let transaction = contract.vote("Proposal A");
+
+    expect(result).to.be.equal(0) && await expect(transaction).to.not.be.rejectedWith(voteError);
   });
 
   it("Unregistered user should not make a vote.", async () => {
@@ -63,7 +64,7 @@ describe("Vote tests", function () {
     let transaction = newCaller.vote("Proposal A");
 
     expect(result).to.be.equal(1) &&
-    await expect(transaction).to.be.rejectedWith("Unable to vote.");
+      await expect(transaction).to.be.rejectedWith(voteError);
   })
 
   it("Registered user should not make a vote for an unknown proposal.", async () => {
@@ -78,5 +79,23 @@ describe("Vote tests", function () {
     expect(result).to.be.equal(3) &&
     await expect(transaction).to.be.rejectedWith("Unable to vote");
   })
-});
 
+  it("Shouldn't be able to vote twice.", async () => {
+    let contract = await ethers.getContractAt("Election", contractAddress);
+    let signers = await ethers.getSigners();
+    let account19 = signers[19];
+
+    let proposal = "Proposal A";
+    let newCaller = contract.connect(account19) as Contract;
+
+    let result = await newCaller.canVote(proposal);
+    let transaction = newCaller.vote(proposal);
+
+    expect(result).to.be.equal(0) && await expect(transaction).to.not.be.rejectedWith(voteError);
+
+    result = await newCaller.canVote(proposal);
+    transaction = newCaller.vote(proposal);
+
+    expect(result).to.be.equal(2) && await expect(transaction).to.be.rejectedWith("Unable to vote");
+});
+});
