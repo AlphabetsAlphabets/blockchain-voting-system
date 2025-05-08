@@ -1,7 +1,11 @@
 import "@nomicfoundation/hardhat-ethers"
 import { ethers } from "hardhat";
 
+import * as chai from "chai";
 import { expect } from "chai";
+import chaiAsPromised from "chai-as-promised";
+
+chai.use(chaiAsPromised);
 
 import dotenv from "dotenv";
 import { Contract } from "ethers";
@@ -34,53 +38,48 @@ describe("Election details", function () {
     contractAddress = await contract.getAddress();
   });
 
-  // it("Get all proposals", async () => {
-  //   const contract = await ethers.getContractAt("Election", contractAddress);
-  //   let proposals = await contract.getAllProposals();
+  it("Get all proposals", async () => {
+    const contract = await ethers.getContractAt("Election", contractAddress);
+    let proposals = await contract.getAllProposals();
 
-  //   expect(proposals).to.not.equal(undefined);
-  // });
+    expect(proposals).to.not.equal(undefined);
+  });
 
-  // // Order of the tests ran is not guaranteed. Which means you need to specify which test to run.
-  // // Should try to make it better by enforcing order some how.
-  // it("Should make a vote.", async () => {
-  //   let contract = await ethers.getContractAt("Election", contractAddress);    
+  // Order of the tests ran is not guaranteed. Which means you need to specify which test to run.
+  // Should try to make it better by enforcing order some how.
+  it("Should make a vote.", async () => {
+    let contract = await ethers.getContractAt("Election", contractAddress);    
 
-  //   contract.on("VoteStatus(string result)", (result: string) => {
-  //     console.log("Should make a vote: ", result);
-  //   });
-    
-  //   await contract.vote("Proposal A");
-  
-  //   expect(0).to.equal(0);
-  // });
+    let result = await contract.canVote("Proposal A");
+    let transaction = await contract.vote("Proposal A");
+    expect(result).to.be.equal(0) && expect(transaction).to.not.throw;
+  });
 
-  // it("Unregistered user should not make a vote.", async () => {
-  //   let contract = await ethers.getContractAt("Election", contractAddress);
-  //   let signers = await ethers.getSigners();
-  //   let randomAccount = signers[2];
-    
-  //   let newCaller = contract.connect(randomAccount) as Contract;
+  it("Unregistered user should not make a vote.", async () => {
+    let contract = await ethers.getContractAt("Election", contractAddress);
+    let signers = await ethers.getSigners();
+    let randomAccount = signers[2];
 
-  //   newCaller.on("VoteStatus(string result)", (result: string) => {
-  //     console.log("Unregistered user should not make a vote: ", result);
-  //   });
+    let newCaller = contract.connect(randomAccount) as Contract;
 
-  //   await newCaller.vote("Proposal A");
-  // })
+    let result = await newCaller.canVote("Proposal A");
+    let transaction = newCaller.vote("Proposal A");
+
+    expect(result).to.be.equal(1) &&
+    await expect(transaction).to.be.rejectedWith("Unable to vote.");
+  })
 
   it("Registered user should not make a vote for an unknown proposal.", async () => {
     let contract = await ethers.getContractAt("Election", contractAddress);
     let signers = await ethers.getSigners();
     let account19 = signers[19];
-    
+
     let newCaller = contract.connect(account19) as Contract;
+    let result = await newCaller.canVote("asdasd");
+    let transaction = newCaller.vote("asds");
 
-    newCaller.on("VoteStatus(string result)", (result: string) => {
-      console.log("Registered user should not make a vote for an unknown proposal: ", result);
-    });
-
-    await newCaller.vote("Proposal  A");
+    expect(result).to.be.equal(3) &&
+    await expect(transaction).to.be.rejectedWith("Unable to vote");
   })
 });
 

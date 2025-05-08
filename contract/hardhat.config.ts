@@ -8,7 +8,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.19",
+  solidity: "0.8.20",
   networks: {
     scrollSepolia: {
       url: process.env.RPC_URL || "", // define as `RPC_URL=https://sepolia-rpc.scroll.io` in ur .env file
