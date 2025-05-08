@@ -60,6 +60,7 @@ contract Election {
 
         totalProposals = 0;
 
+        // TODO: Move this off chain
         for (uint256 i = 0; i < items.length; i++) {
             proposals[items[i]] = Proposal({name: items[i], votes: 0});
             proposalNames.push(items[i]);
@@ -95,16 +96,13 @@ contract Election {
         return 0;
     }
 
-    function vote(
-        string memory proposal
-    ) external onlyDuringVotingPeriod {
+    function vote(string memory proposal) external onlyDuringVotingPeriod {
         uint status = canVote(proposal);
         require(status == 0, "Unable to vote.");
 
         proposals[proposal].votes += 1;
         hasVoted[msg.sender] = true;
     }
-
 
     function endVote() external onlyOwner {
         require(
@@ -114,6 +112,7 @@ contract Election {
         ended = true;
     }
 
+    // getters
     function getProposalVotes(
         string memory proposal
     ) public view returns (uint) {
@@ -137,11 +136,5 @@ contract Election {
         }
 
         return voters;
-    }
-
-    // change to bools
-    function checkElectionStatus() public view returns (bool) {
-        // True if ended, false
-        return ended;
     }
 }
