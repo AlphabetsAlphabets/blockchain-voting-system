@@ -78,7 +78,7 @@ contract Election {
     // 3 - Invalid proposal
     function canVote(
         string memory proposal
-    ) public onlyDuringVotingPeriod view returns (uint status) {
+    ) public view onlyDuringVotingPeriod returns (uint status) {
         if (!voterRegistry[msg.sender]) {
             return 1;
         }
