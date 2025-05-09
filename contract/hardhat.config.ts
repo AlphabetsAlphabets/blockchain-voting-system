@@ -4,6 +4,8 @@ import "@nomicfoundation/hardhat-toolbox";
 import "@nomicfoundation/hardhat-ignition-ethers"; // Installs "ignition" which helps with deployment.
 import "@nomicfoundation/hardhat-ethers"; // Install an custom version of "ethers.js" into hardhat runtime environment.
 
+import "@openzeppelin/hardhat-upgrades"
+
 import dotenv from "dotenv";
 dotenv.config();
 
