@@ -9,9 +9,12 @@ struct Proposal {
     uint votes;
 }
 
-contract Election {
-    event VoteStatus(string result);
-
+// This is the implementation. 
+// Will need to figure out how to
+// actually make it from the proxy.
+contract Election is Initializable {
+    // Do not set any values here. Do it in the initalise function.
+    // Unless the value is a constant.
     address public owner;
     bool public ended;
 
@@ -47,12 +50,12 @@ contract Election {
         _;
     }
 
-    constructor(
+    function initialize(
         string[] memory items,
         address[] memory allowedVoters,
         uint _startTime,
         uint _endTime
-    ) {
+    ) public initializer {
         require(_startTime < _endTime, "Start time must be before end time");
         require(items.length > 0, "At least one proposal required"); // set minimum proposals here
 
@@ -74,6 +77,8 @@ contract Election {
             voterRegistry[allowedVoters[i]] = true;
             totalVoters += 1;
         }
+
+        ended = false;
     }
 
     // 1 - Not registered to vote
