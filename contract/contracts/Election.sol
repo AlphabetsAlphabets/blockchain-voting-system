@@ -50,6 +50,7 @@ contract Election is Initializable {
         _;
     }
 
+    /// @notice initializes the election with proposals and allowed voters
     function initialize(
         string[] memory items,
         address[] memory allowedVoters,
@@ -62,44 +63,49 @@ contract Election is Initializable {
         owner = msg.sender;
         startTime = _startTime;
         endTime = _endTime;
+        ended = false;
 
-        totalProposals = 0;
+        // totalProposals = 0;
+        // totalVoters = 0;
 
-        // TODO: Move this off chain
-        for (uint256 i = 0; i < items.length; i++) {
+        // register proposals
+        for (uint i = 0; i < items.length; i++) {
             proposals[items[i]] = Proposal({name: items[i], votes: 0});
             proposalNames.push(items[i]);
-            totalProposals += 1;
         }
+        totalProposals = items.length;
 
-        voterAddresses = allowedVoters;
+        // register voters
         for (uint i = 0; i < allowedVoters.length; i++) {
             voterRegistry[allowedVoters[i]] = true;
-            totalVoters += 1;
+            voterAddresses.push(allowedVoters[i]);
         }
+        totalVoters = allowedVoters.length;
 
-        ended = false;
+        // // TODO: Move this off chain
+        // for (uint256 i = 0; i < items.length; i++) {
+        //     proposals[items[i]] = Proposal({name: items[i], votes: 0});
+        //     proposalNames.push(items[i]);
+        //     totalProposals += 1;
+        // }
+
+        // voterAddresses = allowedVoters;
+        // for (uint i = 0; i < allowedVoters.length; i++) {
+        //     voterRegistry[allowedVoters[i]] = true;
+        //     totalVoters += 1;
+        // }
     }
 
-    // 1 - Not registered to vote
-    // 2 - Already voted.
-    // 3 - Invalid proposal
-    function canVote(
-        string memory proposal
-    ) public view onlyDuringVotingPeriod returns (uint status) {
-        if (!voterRegistry[msg.sender]) {
-            return 1;
-        }
+    /// @notice checks if a given proposal exists
+    function proposalExists(string memory proposal) internal view returns (bool) {
+        return bytes(proposals[proposal].name).length != 0;
+    }
 
-        if (hasVoted[msg.sender]) {
-            return 2;
-        }
-
-        Proposal memory chosen = proposals[proposal];
-        if (bytes(chosen.name).length == 0 && chosen.votes == 0) {
-            return 3;
-        }
-
+    /// @return 0 if OK, 1 = not registered, 2 = already voted, 3 = invalid proposal
+    function canVote(string memory proposal) public view onlyDuringVotingPeriod returns (uint) {
+        if (!voterRegistry[msg.sender]) return 1;
+        if (hasVoted[msg.sender]) return 2;
+        if (!proposalExists(proposal)) return 3;
         return 0;
     }
 
@@ -119,29 +125,32 @@ contract Election is Initializable {
         ended = true;
     }
 
-    // getters
-    function getProposalVotes(
-        string memory proposal
-    ) public view returns (uint) {
+    // getters (view functions)
+    function getProposalVotes(string memory proposal) public view returns (uint) {
         return proposals[proposal].votes;
     }
 
     function getAllProposals() public view returns (Proposal[] memory) {
-        Proposal[] memory allProposals = new Proposal[](totalProposals);
+        Proposal[] memory all = new Proposal[](totalProposals);
         for (uint i = 0; i < totalProposals; i++) {
-            Proposal memory proposal = proposals[proposalNames[i]];
-            allProposals[i] = proposal;
+            all[i] = proposals[proposalNames[i]];
         }
-
-        return allProposals;
+        return all;
     }
 
     function getAllowedVoters() public view returns (address[] memory) {
-        address[] memory voters = new address[](totalVoters);
-        for (uint i = 0; i < totalVoters; i++) {
-            voters[i] = voterAddresses[i];
-        }
+        return voterAddresses;
+    }
 
-        return voters;
+    function getProposalNames() public view returns (string[] memory) {
+        return proposalNames;
+    }
+
+    function hasAddressVoted(address addr) public view returns (bool) {
+        return hasVoted[addr];
+    }
+
+    function isRegisteredVoter(address addr) public view returns (bool) {
+        return voterRegistry[addr];
     }
 }
