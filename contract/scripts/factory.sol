@@ -1,8 +1,20 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
 import "@openzeppelin/contracts/proxy/Clones.sol";
 
-// this should be called by the frontend
+// minimal interface for the initialize() function
+interface IElection {
+    function initialize(
+        string[] memory items,
+        address[] memory voters,
+        uint start,
+        uint end
+    ) external;
+}
+
 contract ElectionFactory {
-    address public implmentation;
+    address public implementation;
     address[] public elections;
 
     constructor(address _implementation) {
@@ -10,13 +22,13 @@ contract ElectionFactory {
     }
 
     function createElection(
-        string[] memory items;
-        address[] memory voters;
-        uint start;
-        uint end;
+        string[] memory items,
+        address[] memory voters,
+        uint start,
+        uint end
     ) external returns (address) {
         address clone = Clones.clone(implementation);
-        Election(clone).initialize(items, voters, start, end);
+        IElection(clone).initialize(items, voters, start, end);
         elections.push(clone);
         return clone;
     }
