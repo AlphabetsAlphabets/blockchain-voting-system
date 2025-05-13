@@ -10,10 +10,14 @@ dotenv.config();
 const config: HardhatUserConfig = {
   solidity: "0.8.20",
   networks: {
-    scrollSepolia: {
-      url: process.env.RPC_URL || "", // define as `RPC_URL=https://sepolia-rpc.scroll.io` in ur .env file
-      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-    },
+    localhost: {
+      chainId: 31337,
+      url: 'http://127.0.0.1:8545',
+    }
+    // scrollSepolia: {
+    //   url: process.env.RPC_URL || "", // define as `RPC_URL=https://sepolia-rpc.scroll.io` in ur .env file
+    //   accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+    // },
   },
 };
 

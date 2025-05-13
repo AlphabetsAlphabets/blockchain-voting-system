@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "deploy": "npx hardhat ignition deploy ./ignition/modules/Increment.ts --reset --network localhost",
+    "deploy": "npx hardhat ignition deploy ./ignition/modules/Election.ts --reset --network localhost",
     "test": "npx hardhat test",
     "compile": "npx hardhat compile"
   },
@@ -21,8 +21,10 @@
     "hardhat": "^2.23.0"
   },
   "dependencies": {
+    "@mui/x-date-pickers": "^8.3.0",
     "@openzeppelin/contracts": "^5.3.0",
     "chai-as-promised": "^8.0.1",
+    "dayjs": "^1.11.13",
     "mocha": "^11.2.2"
   }
 }

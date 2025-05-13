@@ -1,10 +1,13 @@
 Respect the project structure.
+
 1. `ignition/modules` - Write deployment code inside this folder.
 2. `test` - Tests go here.
 3. `contracts` - Contracts go here.
 
 # Deploying
+
 The purpose of deployment is to use it. It can be deployed to the test net or it can be deployed to the local blockchain the following is the difference:
+
 1. When deploying to the local blockchain, no testnet ETH is required.
 2. When deploying to the testnet, testnet ETH is required.
 
@@ -23,6 +26,7 @@ npx hardhat ignition deploy <path/to/script> --network localhost
 To deploy to a specific network like the scroll sepolia testnet replace `localhost` with `scrollSepolia`.
 
 This is some example output from local deployment.
+
 1. From the terminal where you ran `ignition deploy`.
 
 ```
@@ -59,12 +63,12 @@ eth_maxPriorityFeePerGas
 eth_estimateGas
 eth_call
   Contract deployment: Election
-  Contract address:    0x5fbdb2315678afecb367f032d93f642f64180aa3
+  Contract address:    0x5FbDB2315678afecb367f032d93F642f64180aa3
   From:                0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
 
 eth_sendTransaction
   Contract deployment: Election
-  Contract address:    0x5fbdb2315678afecb367f032d93f642f64180aa3
+  Contract address:    0x5FbDB2315678afecb367f032d93F642f64180aa3
   Transaction:         0xb5433970101443cf926c6a03c07f24e15dedc7deb722d13e34a32c8e9556fc2b
   From:                0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
   Value:               0 ETH
@@ -77,6 +81,7 @@ eth_getTransactionReceipt
 ```
 
 # Testing
+
 Testing is completely isolated. This means you do not need to have the local blockchain up when testing. To test simply run:
 
 ```

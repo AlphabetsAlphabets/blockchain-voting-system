@@ -4,7 +4,7 @@ interface props {
   onClickButton: (buttonName: string) => void;
 }
 
-function Button({ children, typeofButton, onClickButton }: props) {
+function CustomButton({ children, typeofButton, onClickButton }: props) {
   return (
     <button
       type="button"
@@ -16,4 +16,4 @@ function Button({ children, typeofButton, onClickButton }: props) {
   );
 }
 
-export default Button;
+export default CustomButton;

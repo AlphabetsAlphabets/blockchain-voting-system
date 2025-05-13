@@ -1,10 +1,12 @@
 import React from 'react';
 import { AppBar, Box, Toolbar, Typography, Button } from '@mui/material';
+import { DiscoverWalletProviders } from './DiscoverWalletProviders';
+import { useWallet } from './WalletProvider';
 
 const navLinks = [
-  { label: 'Elections', path: '/votingPage' },
-  { label: 'Vote Now', path: '/vote' },
-  { label: 'How It Works', path: '/how-it-works' },
+  { label: 'Vote Now', path: '/votingPage' },
+  { label: 'Elections', path: '/Election' },
+  { label: 'How It Works', path: '/howItWorks' },
 ];
 
 const Navbar = () => {
@@ -62,8 +64,9 @@ const Navbar = () => {
           </Button>
         </Typography>
 
-        {/* Navigation Buttons */}
-        <Box sx={{ display: 'flex', gap: 2 }}>
+        {/* Navigation Buttons and Wallet */}
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          {/* Navigation Links */}
           {navLinks.map((link) => (
             <Button
               onClick={() => {
@@ -87,6 +90,9 @@ const Navbar = () => {
               {link.label}
             </Button>
           ))}
+
+          {/* Wallet Provider Component - no longer need to pass props */}
+          <DiscoverWalletProviders />
         </Box>
       </Toolbar>
     </AppBar>

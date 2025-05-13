@@ -99,7 +99,7 @@ contract Election {
     function vote(string memory proposal) external onlyDuringVotingPeriod {
         uint status = canVote(proposal);
         require(status == 0, "Unable to vote.");
-
+ 
         proposals[proposal].votes += 1;
         hasVoted[msg.sender] = true;
     }
@@ -110,6 +110,12 @@ contract Election {
             "Election already ended or not finished"
         );
         ended = true;
+    }
+
+    // Add this function to your Election contract
+    function transferOwnership(address newOwner) external onlyOwner {
+        require(newOwner != address(0), "New owner is the zero address");
+        owner = newOwner;
     }
 
     // getters
