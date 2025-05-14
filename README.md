@@ -30,7 +30,7 @@ npm run deploy
 2. Add a custom network by clicking the dropdown list on the top left and then "Add custom network".
 3. Fill in the relavant fields. Network name can be anything such as "CUSTOM"
 4. Enter a network name, can be anything.
-5. Default RPC URL -> Add RPC URL and fill in `http://127.0.0.1:8545/` for RPC URL.
+5. Default RPC URL -> Add RPC URL and fill in `http://127.0.0.1:8545/` for RPC URL. This may be different from you, to verify go to the terminal where you ran `npx hardhat node` and scrol lto the top. There should be a similar URL.
 6. Set the chain id as `31337`.
 
 Now we need to import a wallet.
