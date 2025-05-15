@@ -8,11 +8,12 @@ const navLinks = [
   { label: 'Elections', path: '/Election' },
   { label: 'How It Works', path: '/howItWorks' },
 ];
+export const handleNavigation = (route: string) => {
+  window.location.href = route;
+};
 
 const Navbar = () => {
-  const handleNavigation = (route: string) => {
-    window.location.href = route;
-  };
+
 
   return (
     <AppBar

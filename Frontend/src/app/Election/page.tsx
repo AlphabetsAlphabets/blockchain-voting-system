@@ -3,24 +3,24 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ethers, Contract } from 'ethers';
 import FactoryABI from '../../ABI/ElectionFactoryABI.json';
 import ElectionABI from '../../ABI/ElectionABI.json';
-import Navbar from '../../components/navbar';
+import Navbar, { handleNavigation } from '../../components/navbar';
 import Footer from '../../components/footer';
 import { useWallet } from '../../components/WalletProvider';
 import {
-Box,
-Container,
-Typography,
-TextField,
-Button,
-Paper,
-Chip,
-CircularProgress,
-Alert,
-Tab,
-Tabs,
-Divider,
-IconButton,
-Tooltip,
+    Box,
+    Container,
+    Typography,
+    TextField,
+    Button,
+    Paper,
+    Chip,
+    CircularProgress,
+    Alert,
+    Tab,
+    Tabs,
+    Divider,
+    IconButton,
+    Tooltip,
 } from '@mui/material';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import BallotIcon from '@mui/icons-material/Ballot';
@@ -76,7 +76,8 @@ export default function ElectionsPage() {
     useEffect(() => {
         const initContract = async () => {
             if (!signer) return;
-
+            const address = await signer.getAddress();
+            setVoters(address);
             try {
                 const factory = new ethers.Contract(
                     FACTORY_ADDRESS,
@@ -457,8 +458,8 @@ export default function ElectionsPage() {
         const remainingHours = hours % 24;
 
         return `${days} day${days !== 1 ? 's' : ''} ${remainingHours > 0
-                ? `and ${remainingHours} hour${remainingHours !== 1 ? 's' : ''}`
-                : ''
+            ? `and ${remainingHours} hour${remainingHours !== 1 ? 's' : ''}`
+            : ''
             }`;
     };
 
@@ -668,7 +669,9 @@ export default function ElectionsPage() {
                                     Create New Election
                                 </Typography>
 
-                                <Box component="form" onSubmit={handleElection} noValidate>
+                                <Box component="form" onSubmit={(e) => {
+                                    handleElection(e).then(() => { handleNavigation("/votingPage") })
+                                }} noValidate>
                                     <Box sx={{ mb: 4 }}>
                                         <Box display="flex" alignItems="center" mb={1}>
                                             <BallotIcon sx={{ color: '#00c896', mr: 1 }} />
