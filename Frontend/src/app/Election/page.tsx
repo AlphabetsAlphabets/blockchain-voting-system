@@ -6,6 +6,7 @@ import ElectionABI from '../../ABI/ElectionABI.json';
 import Navbar, { handleNavigation } from '../../components/navbar';
 import Footer from '../../components/footer';
 import { useWallet } from '../../components/WalletProvider';
+import toast, { Toaster } from 'react-hot-toast';
 import {
     Box,
     Container,
@@ -182,7 +183,7 @@ export default function ElectionsPage() {
                 setMyElections(userElections);
             } catch (err) {
                 console.error('Error fetching elections:', err);
-                setStatus('Failed to load your elections');
+                toast.error('Failed to load your elections');
                 setStatusType('error');
             } finally {
                 setLoadingElections(false);
@@ -416,6 +417,7 @@ export default function ElectionsPage() {
                 }" ended successfully`
             );
             setStatusType('success');
+            toast.success(`${myElections.find((e) => e.address === electionAddress)?.title} Ended Successfully`)
         } catch (err: any) {
             console.error('Error ending election:', err);
 
@@ -475,6 +477,7 @@ export default function ElectionsPage() {
                 }}
             >
                 <Navbar />
+                <Toaster position='top-center' />
                 <Container maxWidth="lg">
                     <Box textAlign="center" py={8}>
                         <Typography
@@ -531,29 +534,7 @@ export default function ElectionsPage() {
                         />
                     </Box>
 
-                    {/* Status Alert
-                    {status && (
-                        <Alert
-                            severity={statusType}
-                            sx={{
-                                mb: 4,
-                                borderRadius: 2,
-                                backgroundColor: statusType === 'success' ? 'rgba(76, 175, 80, 0.1)' :
-                                    statusType === 'error' ? 'rgba(244, 67, 54, 0.1)' :
-                                        statusType === 'warning' ? 'rgba(255, 152, 0, 0.1)' : 'rgba(33, 150, 243, 0.1)',
-                                color: statusType === 'success' ? '#4caf50' :
-                                    statusType === 'error' ? '#f44336' :
-                                        statusType === 'warning' ? '#ff9800' : '#2196f3',
-                                border: '1px solid',
-                                borderColor: statusType === 'success' ? 'rgba(76, 175, 80, 0.2)' :
-                                    statusType === 'error' ? 'rgba(244, 67, 54, 0.2)' :
-                                        statusType === 'warning' ? 'rgba(255, 152, 0, 0.2)' : 'rgba(33, 150, 243, 0.2)',
-                            }}
-                            onClose={() => setStatus('')}
-                        >
-                            {status}
-                        </Alert>
-                    )} */}
+
 
                     {/* Tabs */}
                     <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 4 }}>
