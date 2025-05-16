@@ -3,24 +3,25 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ethers, Contract } from 'ethers';
 import FactoryABI from '../../ABI/ElectionFactoryABI.json';
 import ElectionABI from '../../ABI/ElectionABI.json';
-import Navbar from '../../components/navbar';
+import Navbar, { handleNavigation } from '../../components/navbar';
 import Footer from '../../components/footer';
 import { useWallet } from '../../components/WalletProvider';
+import toast, { Toaster } from 'react-hot-toast';
 import {
-Box,
-Container,
-Typography,
-TextField,
-Button,
-Paper,
-Chip,
-CircularProgress,
-Alert,
-Tab,
-Tabs,
-Divider,
-IconButton,
-Tooltip,
+    Box,
+    Container,
+    Typography,
+    TextField,
+    Button,
+    Paper,
+    Chip,
+    CircularProgress,
+    Alert,
+    Tab,
+    Tabs,
+    Divider,
+    IconButton,
+    Tooltip,
 } from '@mui/material';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import BallotIcon from '@mui/icons-material/Ballot';
@@ -76,7 +77,8 @@ export default function ElectionsPage() {
     useEffect(() => {
         const initContract = async () => {
             if (!signer) return;
-
+            const address = await signer.getAddress();
+            setVoters(address);
             try {
                 const factory = new ethers.Contract(
                     FACTORY_ADDRESS,
@@ -181,7 +183,7 @@ export default function ElectionsPage() {
                 setMyElections(userElections);
             } catch (err) {
                 console.error('Error fetching elections:', err);
-                setStatus('Failed to load your elections');
+                toast.error('Failed to load your elections');
                 setStatusType('error');
             } finally {
                 setLoadingElections(false);
@@ -415,6 +417,7 @@ export default function ElectionsPage() {
                 }" ended successfully`
             );
             setStatusType('success');
+            toast.success(`${myElections.find((e) => e.address === electionAddress)?.title} Ended Successfully`)
         } catch (err: any) {
             console.error('Error ending election:', err);
 
@@ -457,8 +460,8 @@ export default function ElectionsPage() {
         const remainingHours = hours % 24;
 
         return `${days} day${days !== 1 ? 's' : ''} ${remainingHours > 0
-                ? `and ${remainingHours} hour${remainingHours !== 1 ? 's' : ''}`
-                : ''
+            ? `and ${remainingHours} hour${remainingHours !== 1 ? 's' : ''}`
+            : ''
             }`;
     };
 
@@ -474,6 +477,7 @@ export default function ElectionsPage() {
                 }}
             >
                 <Navbar />
+                <Toaster position='top-center' />
                 <Container maxWidth="lg">
                     <Box textAlign="center" py={8}>
                         <Typography
@@ -530,29 +534,7 @@ export default function ElectionsPage() {
                         />
                     </Box>
 
-                    {/* Status Alert
-                    {status && (
-                        <Alert
-                            severity={statusType}
-                            sx={{
-                                mb: 4,
-                                borderRadius: 2,
-                                backgroundColor: statusType === 'success' ? 'rgba(76, 175, 80, 0.1)' :
-                                    statusType === 'error' ? 'rgba(244, 67, 54, 0.1)' :
-                                        statusType === 'warning' ? 'rgba(255, 152, 0, 0.1)' : 'rgba(33, 150, 243, 0.1)',
-                                color: statusType === 'success' ? '#4caf50' :
-                                    statusType === 'error' ? '#f44336' :
-                                        statusType === 'warning' ? '#ff9800' : '#2196f3',
-                                border: '1px solid',
-                                borderColor: statusType === 'success' ? 'rgba(76, 175, 80, 0.2)' :
-                                    statusType === 'error' ? 'rgba(244, 67, 54, 0.2)' :
-                                        statusType === 'warning' ? 'rgba(255, 152, 0, 0.2)' : 'rgba(33, 150, 243, 0.2)',
-                            }}
-                            onClose={() => setStatus('')}
-                        >
-                            {status}
-                        </Alert>
-                    )} */}
+
 
                     {/* Tabs */}
                     <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 4 }}>
@@ -668,7 +650,9 @@ export default function ElectionsPage() {
                                     Create New Election
                                 </Typography>
 
-                                <Box component="form" onSubmit={handleElection} noValidate>
+                                <Box component="form" onSubmit={(e) => {
+                                    handleElection(e).then(() => { handleNavigation("/votingPage") })
+                                }} noValidate>
                                     <Box sx={{ mb: 4 }}>
                                         <Box display="flex" alignItems="center" mb={1}>
                                             <BallotIcon sx={{ color: '#00c896', mr: 1 }} />
