@@ -12,7 +12,6 @@ import ElectionCard from '../../components/ElectionCard';
 import CandidateCard from '../../components/CandidateCard';
 import VoteCountDashboard from '../../components/VoteCountDashboard';
 import { Election, Candidate, Proposal } from '../../types/electionTypes';
-import toast, { Toaster } from 'react-hot-toast';
 
 // Update this with your deployed factory address
 const FACTORY_ADDRESS = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
@@ -158,7 +157,7 @@ export default function VotingPage() {
           setElections(blockchainElections);
         }
       } catch (err) {
-        toast.error("Failed to load your elections");
+        console.error("Error fetching blockchain elections:", err);
       } finally {
         setLoading(false);
       }
@@ -192,7 +191,7 @@ export default function VotingPage() {
         }
       } catch (err) {
         console.error("Error fetching proposals for selected election:", err);
-        toast.error("Failed to load election details");
+        setError("Failed to load election details");
       }
     };
 
@@ -202,12 +201,12 @@ export default function VotingPage() {
   // Handle blockchain vote submission (keep as is)
   const handleBlockchainVote = async () => {
     if (!selectedElection || !selectedCandidate || !electionContracts[selectedElection.id]) {
-      toast.error('⚠️ Please select a candidate first.');
+      setMessage('⚠️ Please select a candidate first.');
       return;
     }
 
     if (votedElectionIds.includes(selectedElection.id)) {
-      toast.error('⚠️ You have already voted in this election.');
+      setMessage('⚠️ You have already voted in this election.');
       return;
     }
 
@@ -224,7 +223,7 @@ export default function VotingPage() {
 
       // Update voted election IDs
       setVotedElectionIds([...votedElectionIds, selectedElection.id]);
-      toast.success(`You voted for ${selectedCandidate.name} in ${selectedElection.title}.`);
+      setMessage(`✅ You voted for ${selectedCandidate.name} in the ${selectedElection.title}.`);
 
       // Update voter metrics
       setVoterMetrics(prev => {
@@ -240,7 +239,7 @@ export default function VotingPage() {
       setSelectedCandidate(null);
     } catch (err: any) {
       console.error("Error submitting vote:", err);
-      toast.error('Failed to submit vote');
+      setMessage(`⚠️ Error: ${err.message || 'Failed to submit vote'}`);
     } finally {
       setLoading(false);
     }
@@ -312,7 +311,6 @@ export default function VotingPage() {
         }}
       >
         <Navbar />
-        <Toaster position='top-center'/>
 
         <Container maxWidth="lg" sx={{ py: 6 }}>
           <Typography
