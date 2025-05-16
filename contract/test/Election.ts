@@ -60,9 +60,12 @@ describe("Vote tests", function () {
     let randomAccount = signers[2];
 
     let newCaller = contract.connect(randomAccount) as Contract;
-    let result = await newCaller.vote.staticCall("Proposal A");
 
-    expect(result).to.be.equal(1);
+    let result = await newCaller.canVote("Proposal A");
+    let transaction = newCaller.vote("Proposal A");
+
+    expect(result).to.be.equal(1) &&
+      await expect(transaction).to.be.rejectedWith(voteError);
   })
 
   it("Registered user should not make a vote for an unknown proposal.", async () => {
@@ -71,24 +74,30 @@ describe("Vote tests", function () {
     let account19 = signers[19];
 
     let newCaller = contract.connect(account19) as Contract;
-    let result = await newCaller.vote.staticCall("asds");
+    let result = await newCaller.canVote("asdasd");
+    let transaction = newCaller.vote("asds");
 
-    expect(result).to.be.equal(3);
+    expect(result).to.be.equal(3) &&
+      await expect(transaction).to.be.rejectedWith("Unable to vote");
   })
 
-  this.afterAll(async () => {
-    it("Shouldn't be able to vote twice.", async () => {
-      let contract = await ethers.getContractAt("Election", contractAddress);
-      let signers = await ethers.getSigners();
-      let account19 = signers[19];
+  it("Shouldn't be able to vote twice.", async () => {
+    let contract = await ethers.getContractAt("Election", contractAddress);
+    let signers = await ethers.getSigners();
+    let account19 = signers[19];
 
-      let proposal = "Proposal A";
-      let newCaller = contract.connect(account19) as Contract;
+    let proposal = "Proposal A";
+    let newCaller = contract.connect(account19) as Contract;
 
-      let result = await newCaller.vote.staticCall(proposal);
+    let result = await newCaller.canVote(proposal);
+    let transaction = newCaller.vote(proposal);
 
-      expect(result).to.be.equal(2);
-    });
+    expect(result).to.be.equal(0) && await expect(transaction).to.not.be.rejectedWith(voteError);
+
+    result = await newCaller.canVote(proposal);
+    transaction = newCaller.vote(proposal);
+
+    expect(result).to.be.equal(2) && await expect(transaction).to.be.rejectedWith("Unable to vote");
   });
 });
 
@@ -123,21 +132,20 @@ describe("Election getters", () => {
     // First make a vote to one proposal then view.
     let contract = await ethers.getContractAt("Election", contractAddress);
     let proposal = "Proposal A";
-    let result = await contract.vote.staticCall(proposal);
+    let result = await contract.canVote(proposal);
+    let transaction = contract.vote(proposal);
 
-    expect(result).to.equal(0);
-
-    await contract.vote(proposal);
+    expect(result).to.equal(0) && await expect(transaction).to.not.be.rejectedWith(voteError);
 
     let signers = await ethers.getSigners();
     let account19 = signers[19];
 
     let newCaller = contract.connect(account19) as Contract;
-    result = await newCaller.vote.staticCall(proposal);
+    result = await newCaller.canVote(proposal);
+    transaction = newCaller.vote(proposal);
 
-    expect(result).to.be.equal(0);
-
-    await newCaller.vote(proposal);
+    expect(result).to.be.equal(0) &&
+      await expect(transaction).to.not.be.rejectedWith(voteError);
 
     let votes_for_a = await contract.getProposalVotes(proposal);
     let votes_for_b = await contract.getProposalVotes("Proposal B");
