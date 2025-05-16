@@ -4,7 +4,6 @@ This assignment is done by Yap Jia Hong (TP063375), Tamim Mustapha Hozza (TP0725
 # Blockchain voting system
 **NEVER RUN NPM INSTALL IN THE ROOT OF THE PROJECT ONLY IN THE SUB FOLDERS.**
 
-
 The repository has a monorepo structure. This means that the frontend is in the `frontend` folder and the code for the smart contract is in `contracts`. Therefore, you must run `npm` or `npx` commands in their respective folders. The deployment section in this README is for running the application. For more detailed developer instructions, make sure to refer to the `README.md` in the respective folders.
 
 # Deployment
