@@ -99,7 +99,7 @@ contract Election {
     function vote(string memory proposal) external onlyDuringVotingPeriod {
         uint status = canVote(proposal);
         require(status == 0, "Unable to vote.");
- 
+        
         proposals[proposal].votes += 1;
         hasVoted[msg.sender] = true;
     }
